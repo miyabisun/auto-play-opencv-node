@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+
+echo "download opencv.js"
+# curl https://docs.opencv.org/master/opencv.js -o lib/opencv.js
+curl https://raw.githubusercontent.com/noitaro/android-automation-tool/master/wwwroot/js/opencv.js -o lib/opencv.js
