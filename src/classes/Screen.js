@@ -24,12 +24,6 @@ module.exports = class Screen {
     return MatchResult.match(this, template, threshold);
   }
 
-  crop (x, y, width, height) {
-    return;
-    return this.snapshot.clone()
-      .crop(x, y, width, height);
-  }
-
   get width () {
     return this.adb.wmSize.width;
   }

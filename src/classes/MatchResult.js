@@ -7,6 +7,7 @@ module.exports = class MatchResult {
     this.isMatch = isMatch;
     this.position = position;
     this.loc = loc;
+    this.name = "";
   }
 
   static async match (screen, template, threshold) {
