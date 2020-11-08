@@ -29,17 +29,14 @@ module.exports = (screen, templates, verbose = false) => {
     conditions.forEach(it => assertTemplate(templates, it))
     if (verbose) console.log(`waiting: ${conditions}`);
     while (await screen.snap()) {
-      const results = await Promise.all(
-        conditions.map(async template => {
-          const result = await check(template);
+      for (const template of conditions) {
+        const result = await check(template);
+        if (result.isMatch) {
+          if (verbose) console.log(`hit: ${result.name}`);
           result.name = template;
           return result;
-        })
-      );
-      const result = results.find(it => it.isMatch);
-      if (!result) continue;
-      if (verbose) console.log(`hit: ${result.name}`);
-      return result;
+        }
+      }
     }
   }
 
