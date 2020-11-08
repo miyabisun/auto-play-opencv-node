@@ -39,6 +39,6 @@ module.exports = class MatchResult {
 
   tap () {
     const {x, y} = this.position;
-    this.screen.tap(x, y);
+    this.screen.adb.tap(x, y);
   }
 }

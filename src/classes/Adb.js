@@ -25,6 +25,14 @@ module.exports = class Adb {
     this.shell(`input tap ${x} ${y}`);
   }
 
+  swipe (x1, y1, x2, y2, time = 0) {
+    if (time) {
+      this.shell(`input swipe ${x1} ${y1} ${x2} ${y2} ${time}`);
+    } else {
+      this.shell(`input swipe ${x1} ${y1} ${x2} ${y2}`);
+    }
+  }
+
   debug (isEnabled = true) {
     const num = isEnabled ? "1" : "0";
     exec(`${this.path} shell settings put system pointer_location ${num}`);
