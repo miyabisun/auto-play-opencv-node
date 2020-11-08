@@ -25,7 +25,7 @@ module.exports = (screen, templates, verbose = false) => {
   const tap = async template =>
     (await tmp(template)).tap();
 
-  const cond1 = async conditions => {
+  const cond = async conditions => {
     conditions.forEach(it => assertTemplate(templates, it))
     if (verbose) console.log(`waiting: ${conditions}`);
     while (await screen.snap()) {
@@ -40,5 +40,5 @@ module.exports = (screen, templates, verbose = false) => {
     }
   }
 
-  return {ms, tmp, tap, cond1};
+  return {ms, tmp, tap, cond};
 }

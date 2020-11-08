@@ -21,7 +21,7 @@ module.exports = (screen, templates, verbose = false) => {
     return result.isMatch;
   }
 
-  const cond = async (conditions, refresh = true) => {
+  const cond1 = async (conditions, refresh = true) => {
     conditions.forEach(it => assertTemplate(templates, it))
     if (verbose) console.log(`check: ${conditions}`);
     if (refresh) await screen.snap();
@@ -36,5 +36,5 @@ module.exports = (screen, templates, verbose = false) => {
     if (verbose) console.log(`hit: (none)`);
   }
 
-  return {find, isMatch, cond};
+  return {find, isMatch, cond1};
 }
