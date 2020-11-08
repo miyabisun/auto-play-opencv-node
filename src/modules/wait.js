@@ -1,5 +1,5 @@
 const R = require("ramda");
-const assertTemplate = require("./assert-template.js");
+const assertTemplate = require("../functions/assert-template.js");
 
 module.exports = (screen, templates, verbose = false) => {
   const ms = time => new Promise(resolve => {
@@ -25,14 +25,14 @@ module.exports = (screen, templates, verbose = false) => {
   const tap = async template =>
     (await tmp(template)).tap();
 
-  const cond = async conditions => {
+  const cond1 = async conditions => {
     conditions.forEach(it => assertTemplate(templates, it))
     if (verbose) console.log(`waiting: ${conditions}`);
     while (await screen.snap()) {
       for (const template of conditions) {
         const result = await check(template);
         if (result.isMatch) {
-          if (verbose) console.log(`hit: ${result.name}`);
+          if (verbose) console.log(`hit: ${template}`);
           result.name = template;
           return result;
         }
@@ -40,5 +40,5 @@ module.exports = (screen, templates, verbose = false) => {
     }
   }
 
-  return {ms, tmp, tap, cond};
+  return {ms, tmp, tap, cond1};
 }
