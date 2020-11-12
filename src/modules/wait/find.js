@@ -1,11 +1,11 @@
-module.exports = async ({check, assert, snap, verbose}, templateList) => {
+module.exports = async ({check, assert, snap, log}, templateList) => {
   templateList.forEach(it => assert(it));
-  if (verbose) console.log(`waiting (find): ${templateList}`);
+  log(`waiting (find): ${templateList}`);
   while (await snap()) {
     for (const template of templateList) {
       const result = await check(template);
       if (result.isMatch) {
-        if (verbose) console.log(`hit (find): ${template}`);
+        log(`hit (find): ${template}`);
         result.name = template;
         return result;
       }

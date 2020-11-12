@@ -21,6 +21,7 @@ module.exports = (screen, templates, verbose = false) => {
   const cache = {};
   const modules = {
     screen, templates, verbose,
+    log: verbose ? console.log : it => it,
     snap: async () => screen.snap(),
     check: async template => check(screen, templates, template),
     assert: template => assertTemplate(templates, template),
@@ -52,8 +53,10 @@ module.exports = (screen, templates, verbose = false) => {
       match1(modules, template, refresh),
     none1: async (templateList, refresh = true) =>
       none1(modules, templateList, refresh),
-    time: async ms =>
-      time(ms, verbose),
+    time: async ms => {
+      modules.log(`waiting (time): ${ms.toLocaleString()} ms`);
+      await time(ms);
+    },
     tap: async template =>
       tap(modules, template),
     tap1: async (template, refresh = true) =>

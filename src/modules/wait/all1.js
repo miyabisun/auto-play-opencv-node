@@ -1,6 +1,6 @@
-module.exports = async ({check, assert, snap, verbose}, templateList, refresh = true) => {
+module.exports = async ({check, assert, snap, log}, templateList, refresh = true) => {
   templateList.forEach(it => assert(it));
-  if (verbose) console.log(`check (all1): ${templateList}`);
+  log(`check (all1): ${templateList}`);
   if (refresh) await snap();
   for (const template of templateList) {
     const result = await check(template);
