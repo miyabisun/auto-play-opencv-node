@@ -7,7 +7,6 @@ module.exports = async ({check, assert, snap, log}, templateList, refresh = true
   const results = await Promise.all(
     templateList.map(async template => {
       const result = await check(template);
-      result.name = template;
       return result;
     })
   );

@@ -6,7 +6,6 @@ module.exports = async ({check, assert, snap, log}, templateList) => {
       const result = await check(template);
       if (result.isMatch) {
         log(`hit (find): ${template}`);
-        result.name = template;
         return result;
       }
     }
