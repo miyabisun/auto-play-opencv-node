@@ -13,4 +13,5 @@ module.exports = async ({check, assert, snap, log}, conditions, refresh = true) 
     }
   }
   log(`hit (cond1): (none)`);
+  return null;
 }

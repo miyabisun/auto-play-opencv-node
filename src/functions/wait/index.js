@@ -1,4 +1,4 @@
-const assertTemplate = require("../../functions/assert-template");
+const assert = require("./assert");
 const all1 = require("./all1");
 const any1 = require("./any1");
 const check = require("./check");
@@ -24,7 +24,7 @@ module.exports = (screen, templates, verbose = false) => {
     log: verbose ? console.log : it => it,
     snap: async () => screen.snap(),
     check: async template => check(screen, templates, template),
-    assert: template => assertTemplate(templates, template),
+    assert: template => assert(templates, template),
   };
   return {
     all1: async (templateList, refresh = true) =>

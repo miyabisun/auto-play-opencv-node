@@ -11,5 +11,7 @@ module.exports = async ({check, assert, snap, log}, templateList, refresh = true
       return result;
     })
   );
-  return results.filter(it => it.isMatch);
+  const hits = results.filter(it => it.isMatch)
+  log(`hit (filter1): ${hits.match(it => it.name)}`);
+  return hits;
 }

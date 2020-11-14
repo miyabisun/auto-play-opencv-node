@@ -1,4 +1,4 @@
-const index = require("../../src/modules/wait/index");
+const index = require("../../../src/functions/wait/index");
 
 test("is function", () => {
   expect(typeof index).toBe("function");
@@ -7,6 +7,10 @@ test("is function", () => {
 test("result is object", () => {
   const result = index();
   expect(typeof result).toBe("object");
-  const keys = ["all1", "any1", "cond", "cond1", "filter1", "find", "find1", "is1", "map1", "max1", "match", "match1", "none1", "time", "tap", "tap1", "tapc"];
+  const keys = [
+    "all1", "any1", "cond", "cond1", "filter1",
+    "find", "find1", "is1", "map1", "match", "match1",
+    "max1", "none1", "tap", "tap1", "tapc", "time"
+  ];
   keys.forEach(key => expect(Object.keys(result)).toContain(key));
 });
