@@ -1,13 +1,14 @@
 const MatchResult = require("./MatchResult")
 
 module.exports = class Screen {
-  constructor (adb) {
+  constructor (adb, cv = null) {
     this.adb = adb;
+    this.cv = cv;
     this.snapshot = null;
   }
 
-  static async init (adb) {
-    const screen = new Screen(adb);
+  static async init (adb, cv = null) {
+    const screen = new Screen(adb, cv);
     await screen.snap();
     return screen;
   }

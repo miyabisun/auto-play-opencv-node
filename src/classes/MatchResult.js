@@ -1,5 +1,3 @@
-const cv = require("../../lib/opencv");
-
 module.exports = class MatchResult {
   constructor ({screen, template, result, isMatch, position, loc}) {
     this.screen = screen;
@@ -7,12 +5,12 @@ module.exports = class MatchResult {
     this.isMatch = isMatch;
     this.position = position;
     this.loc = loc;
-    this.name = "";
   }
 
-  static match (screen, template, threshold) {
-    const sm = screen.snapshot.mat();
-    const tm = template.mat();
+  static match (screen, template, threshold = 0.8) {
+    const {cv, snapshot} = screen;
+    const sm = cv.matFromImageData(snapshot.bitmap);
+    const tm = cv.matFromImageData(template.bitmap);
     const dst = new cv.Mat();
     const mask = new cv.Mat();
 
@@ -36,5 +34,9 @@ module.exports = class MatchResult {
   tap () {
     const {x, y} = this.position;
     this.screen.adb.tap(x, y);
+  }
+
+  get name () {
+    return this.template.name;
   }
 }

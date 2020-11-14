@@ -1,9 +1,5 @@
 const index = require("../../../src/functions/wait/index");
 
-test("is function", () => {
-  expect(typeof index).toBe("function");
-});
-
 test("result is object", () => {
   const result = index();
   expect(typeof result).toBe("object");

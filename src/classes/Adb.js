@@ -10,8 +10,10 @@ module.exports = class Adb {
     this.bk = {}
   }
 
-  static init (path) {
-    return new Adb(path);
+  static init (path, autoBackup = false) {
+    const adb = new Adb(path);
+    if (autoBackup) process.on("exit", () => adb.backup());
+    return adb;
   }
 
   async capture () {
