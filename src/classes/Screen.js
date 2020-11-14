@@ -7,7 +7,7 @@ module.exports = class Screen {
   }
 
   static async init (adb) {
-    const screen = new Screen(adb)
+    const screen = new Screen(adb);
     await screen.snap();
     return screen;
   }

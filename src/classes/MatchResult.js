@@ -10,25 +10,21 @@ module.exports = class MatchResult {
     this.name = "";
   }
 
-  static async match (screen, template, threshold) {
+  static match (screen, template, threshold) {
+    const sm = screen.snapshot.mat();
+    const tm = template.mat();
     const dst = new cv.Mat();
     const mask = new cv.Mat();
 
-    const sm = await screen.snapshot.mat();
-    const tm = await template.mat();
     cv.matchTemplate(sm, tm, dst, cv.TM_CCOEFF_NORMED, mask);
     const result = cv.minMaxLoc(dst, mask);
-
-    sm.delete();
-    tm.delete();
-    dst.delete();
-    mask.delete();
+    [sm, tm, dst, mask].forEach(it => it.delete());
 
     const {x, y} = result.maxLoc;
     const {width, height} = template;
     return new MatchResult({
       screen, template,
-      loc: result.maxVal,
+      val: result.maxVal,
       isMatch: threshold < result.maxVal,
       position: {
         x: x + Math.floor(width / 2),

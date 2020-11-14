@@ -11,7 +11,7 @@ module.exports = async ({check, assert, snap, log}, templateList, refresh = true
       return result;
     })
   );
-  const result = results.reduce(R.maxBy(result => result.loc));
+  const result = results.reduce(R.maxBy(result => result.val));
   log(`hit (max1): ${result.isMatch ? result.name : "(none)"}`);
   return result.isMatch ? result : null;
 }

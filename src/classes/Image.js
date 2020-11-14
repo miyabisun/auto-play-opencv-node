@@ -1,34 +1,29 @@
-const sharp = require("sharp");
 const cv = require("../../lib/opencv");
 const Jimp = require("jimp");
 
 module.exports = class Image {
-  constructor (buffer, meta) {
-    this.buffer = buffer;
-    this.meta = meta;
+  constructor (data) {
+    this.data = data;
   }
 
   static async read (item) {
-    const image = sharp(item);
-    const buffer = await image.toBuffer();
-    const meta = await image.metadata();
-    return new Image(buffer, meta);
+    const data = await Jimp.read(item);
+    return new Image(data);
   }
 
   async write (path) {
-    return sharp(this.buffer).toFile(path);
+    return this.data.writeAsync(path);
   }
 
-  async mat () {
-    const jimp = await Jimp.read(this.buffer);
-    return cv.matFromImageData(jimp.bitmap);
+  mat () {
+    return cv.matFromImageData(this.data.bitmap);
   }
 
   get width () {
-    return this.meta.width;
+    return this.data.bitmap.width;
   }
 
   get height () {
-    return this.meta.height;
+    return this.data.bitmap.height;
   }
 }
