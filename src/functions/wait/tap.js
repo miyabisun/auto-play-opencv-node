@@ -2,7 +2,8 @@ module.exports = async ({check, assert, snap, log}, template, cache = null) => {
   assert(template);
   if (cache && cache[template]) {
     log(`cache-tap: ${template}`);
-    return cache[template].tap();
+    cache[template].tap();
+    return cache[template];
   }
   log(`waiting (tap): ${template}`);
   while (await snap()) {
