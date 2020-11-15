@@ -1,10 +1,10 @@
-module.exports = class MatchResult {
-  constructor ({screen, template, result, isMatch, position, loc}) {
+module.exports = class Result {
+  constructor ({screen, template, result, isMatch, position, val}) {
     this.screen = screen;
     this.template = template;
     this.isMatch = isMatch;
     this.position = position;
-    this.loc = loc;
+    this.val = val;
   }
 
   static match (screen, template, threshold = 0.8) {
@@ -20,7 +20,7 @@ module.exports = class MatchResult {
 
     const {x, y} = result.maxLoc;
     const {width, height} = template;
-    return new MatchResult({
+    return new Result({
       screen, template,
       val: result.maxVal,
       isMatch: threshold < result.maxVal,

@@ -1,4 +1,4 @@
-const MatchResult = require("./MatchResult")
+const Result = require("./Result")
 
 module.exports = class Screen {
   constructor (adb, cv = null) {
@@ -57,7 +57,7 @@ module.exports = class Screen {
   }
 
   async match (template, threshold = 0.8) {
-    return MatchResult.match(this, template, threshold);
+    return Result.match(this, template, threshold);
   }
 
   get width () {
