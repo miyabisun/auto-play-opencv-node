@@ -1,7 +1,7 @@
 const {execSync} = require("child_process");
 const Image = require("./Image");
 
-const exec = c => execSync(c, {maxBuffer: 1024 * 1024 * 1024})
+const exec = c => execSync(c, {maxBuffer: 1024 * 1024 * 1024});
 
 module.exports = class Adb {
   constructor (path) {
