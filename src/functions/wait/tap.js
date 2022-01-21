@@ -1,3 +1,5 @@
+const time = require("./time.js");
+
 module.exports = async ({check, assert, snap, log}, template, cache = null) => {
   assert(template);
   if (cache && cache[template]) {
@@ -7,12 +9,13 @@ module.exports = async ({check, assert, snap, log}, template, cache = null) => {
   }
   log(`waiting (tap): ${template}`);
   while (await snap()) {
-    const result = await check(template);
+    const result = check(template);
     if (result.isMatch) {
       log(`hit (tap): ${template}`);
       if (cache) cache[template] = result;
       result.tap();
       return result;
     }
+    await time(100);
   }
 }

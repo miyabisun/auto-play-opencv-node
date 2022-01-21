@@ -2,7 +2,7 @@ module.exports = async ({check, assert, snap, log}, template, refresh = true) =>
   assert(template);
   log(`check (match1): ${template}`);
   if (refresh) await snap();
-  const result = await check(template);
+  const result = check(template);
   log(`hit (match1): ${result.isMatch ? template : "(none)"}`);
   return result.isMatch ? result : null;
 }

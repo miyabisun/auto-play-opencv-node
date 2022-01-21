@@ -7,6 +7,7 @@ const cond1 = require("./cond1");
 const filter1 = require("./filter1");
 const find = require("./find");
 const find1 = require("./find1");
+const hold = require("./hold");
 const is1 = require("./is1");
 const match = require("./match");
 const match1 = require("./match1");
@@ -23,7 +24,7 @@ module.exports = (screen, templates, verbose = false) => {
     screen, templates, verbose,
     log: verbose ? console.log : it => it,
     snap: async () => screen.snap(),
-    check: async template => check(screen, templates, template),
+    check: template => check(screen, templates, template),
     assert: template => assert(templates, template),
   };
   return {
@@ -41,6 +42,8 @@ module.exports = (screen, templates, verbose = false) => {
       find(modules, templateList),
     find1: async (templateList, refresh = true) =>
       find1(modules, templateList, refresh),
+    hold: async (template, ms, refresh = true) =>
+      hold(modules, template, ms, refresh),
     is1: async (template, refresh = true) =>
       is1(modules, template, refresh),
     map1: async (templateList, refresh = true) =>

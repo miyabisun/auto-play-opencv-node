@@ -1,7 +1,9 @@
-const {execSync} = require("child_process");
+const R = require("ramda");
+const {execSync, exec: e} = require("child_process");
 const Image = require("./Image");
 
 const exec = c => execSync(c, {maxBuffer: 1024 * 1024 * 1024});
+const command = c => exec(c, {maxBuffer: 1024 * 1024 * 1024})
 
 module.exports = class Adb {
   constructor (path) {
@@ -26,15 +28,19 @@ module.exports = class Adb {
   }
 
   tap (x, y) {
-    this.shell(`input tap ${x} ${y}`);
+    command(`${this.path} shell input tap ${x} ${y}`);
   }
 
-  swipe (x1, y1, x2, y2, time = 0) {
-    if (time) {
-      this.shell(`input swipe ${x1} ${y1} ${x2} ${y2} ${time}`);
+  swipe (x1, y1, x2, y2, ms = 0) {
+    if (ms) {
+      this.shell(`input swipe ${x1} ${y1} ${x2} ${y2} ${ms}`);
     } else {
       this.shell(`input swipe ${x1} ${y1} ${x2} ${y2}`);
     }
+  }
+
+  hold (x, y, ms) {
+    this.shell(`input swipe ${x} ${y} ${x} ${y} ${ms}`)
   }
 
   debug (isEnabled = true) {
@@ -48,14 +54,31 @@ module.exports = class Adb {
     }
   }
 
-  start (path) {
-    this.shell(`am start -n ${path}`);
-    this.activity = path;
+  isStarted (path) {
+    return this.activities.includes(path);
   }
 
-  stop () {
+  start (path) {
+    if (path) this.activity = path;
     if (!this.activity) return;
+    if (this.isStarted(this.activity)) return;
+    this.shell(`am start -n ${path}`);
+  }
+
+  stop (path) {
+    if (path) this.activity = path;
+    if (!this.activity) return;
+    if (!this.isStarted(this.activity)) return;
     this.shell(`am force-stop ${this.activity.replace(/\/[^\/]+$/, "")}`);
+  }
+
+  wakeup () {
+    this.isWake = true;
+  }
+
+  sleep () {
+    this.backup();
+    this.isWake = false;
   }
 
   get wmSize () {
@@ -75,6 +98,7 @@ module.exports = class Adb {
     if (!this.bk.brightness)
       this.bk.brightness = this.brightness;
     this.shell(`settings put system screen_brightness ${num}`);
+    return num;
   }
 
   get volume () {
@@ -84,5 +108,37 @@ module.exports = class Adb {
   set volume (num) {
     if (!this.bk.volume) this.bk.volume = this.volume;
     this.shell(`media volume --set ${num}`);
+    return num;
+  }
+
+  get activities () {
+    return R.pipe(
+      () => this.shell("dumpsys activity activities").toString(),
+      R.split("\n"),
+      R.map(R.pipe(
+        R.trim,
+        R.match(/Run #\d+: ActivityRecord{\w+ \w+ ([\w\.\/]+)/),
+        it => it ? it[1] : null,
+      )),
+      R.filter(R.identity),
+    )();
+  }
+
+  get isWake () {
+    return R.pipe(
+      () => this.shell("dumpsys power").toString(),
+      R.split("\n"),
+      R.find(R.test(/mWakefulness\=\w+/)),
+      R.trim,
+      R.match(/mWakefulness\=(\w+)/),
+      it => it[1] == "Awake",
+    )();
+  }
+  set isWake (bool) {
+    if (this.isWake == bool) return bool;
+    bool
+      ? this.shell("input keyevent KEYCODE_WAKEUP")
+      : this.shell("input keyevent KEYCODE_SLEEP");
+    return bool;
   }
 }

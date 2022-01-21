@@ -1,14 +1,15 @@
-const Result = require("./Result")
+const Result = require("./Result");
+const cv = require("../modules/opencv.js");
 
 module.exports = class Screen {
-  constructor (adb, cv = null) {
+  constructor (adb) {
     this.adb = adb;
     this.cv = cv;
     this.snapshot = null;
   }
 
-  static async init (adb, cv = null) {
-    const screen = new Screen(adb, cv);
+  static async init (adb) {
+    const screen = new Screen(adb);
     await screen.snap();
     return screen;
   }
@@ -56,7 +57,7 @@ module.exports = class Screen {
     this.swipeTo(move, x, y, p, true);
   }
 
-  async match (template, threshold = 0.8) {
+  match (template, threshold = 0.8) {
     return Result.match(this, template, threshold);
   }
 

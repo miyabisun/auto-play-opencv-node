@@ -7,7 +7,8 @@ module.exports = async ({check, assert, snap, log}, templateList, refresh = true
   return Promise.all(
     templateList.map(async template => {
       const result = await check(template);
-      return result;
+      log(`hit (map1): ${result.isMatch ? template : "(none)"}`);
+      return result.isMatch ? result : null;
     })
   );
 }

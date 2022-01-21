@@ -2,7 +2,7 @@ const read = require("fs-readdir-recursive");
 const R = require("ramda");
 const Image = require("../classes/Image");
 
-module.exports = async path => {
+module.exports = async (path) => {
   const promises = read(path)
     .filter(R.match(/png$/))
     .map(p => [p, R.replace(/\.[^.]+$/, "", p)])
