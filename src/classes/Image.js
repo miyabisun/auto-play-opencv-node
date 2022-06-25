@@ -4,6 +4,7 @@ module.exports = class Image {
   constructor (data, name = null) {
     this.data = data;
     this.name = name;
+    this._bitmap = null;
   }
 
   static async read (item, name = null) {
@@ -16,7 +17,9 @@ module.exports = class Image {
   }
 
   get bitmap () {
-    return this.data.bitmap;
+    if (this._bitmap) return this._bitmap;
+    this._bitmap = this.data.bitmap;
+    return this._bitmap;
   }
 
   get width () {
