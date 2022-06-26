@@ -5,10 +5,7 @@ module.exports = async ({check, assert, snap, log}, templateList, refresh = true
   log(`check (max1): ${templateList}`);
   if (refresh) await snap();
   const results = await Promise.all(
-    templateList.map(async template => {
-      const result = await check(template);
-      return result;
-    })
+    check(templateList)
   );
   const result = results.reduce(R.maxBy(result => result.val));
   results.forEach(({name, val}) => log(`  ${name}: ${Math.round(val * 1000) / 1000}`));

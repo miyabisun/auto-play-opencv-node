@@ -1,4 +1,5 @@
-const cv = require("../modules/opencv.js");
+const templateMatch = require("../modules/template-match");
+const {Worker} = require("worker_threads");
 
 module.exports = class Result {
   constructor ({screen, template, result, isMatch, position, val}) {
@@ -10,26 +11,35 @@ module.exports = class Result {
   }
 
   static match (screen, template, threshold = 0.8, method = "TM_CCOEFF_NORMED") {
-    const {snapshot} = screen;
-    const sm = cv.matFromImageData(snapshot.bitmap);
-    const tm = cv.matFromImageData(template.bitmap);
-    const dst = new cv.Mat();
-
-    cv.matchTemplate(sm, tm, dst, cv[method]);
-    const result = cv.minMaxLoc(dst);
-    [sm, tm, dst].forEach(it => it.delete());
-
-    const {x, y} = result.maxLoc;
-    const {width, height} = template;
-    return new Result({
-      screen, template,
-      val: result.maxVal,
-      isMatch: threshold < result.maxVal,
-      position: {
-        x: x + Math.floor(width / 2),
-        y: y + Math.floor(height / 2),
-      },
+    const {val, position} = templateMatch({
+      screen: screen.snapshot.bitmap,
+      template: template.bitmap,
+      method
     });
+    return new Result({
+      screen, template, val, position,
+      isMatch: threshold < val,
+    })
+  }
+
+  static async asyncMatch (screen, template, threshold = 0.8, method = "TM_CCOEFF_NORMED") {
+    const workerData = {
+      screen: screen.snapshot.bitmap,
+      template: template.bitmap,
+      method
+    };
+    const {val, position} = await new Promise((resolve, reject) => {
+      try {
+        const worker = new Worker(`${__dirname}/../modules/worker-match.js`, {workerData});
+        worker.on("message", resolve);
+      } catch (e) {
+        reject(e);
+      }
+    });
+    return new Result({
+      screen, template, val, position,
+      isMatch: threshold < val,
+    })
   }
 
   tap () {

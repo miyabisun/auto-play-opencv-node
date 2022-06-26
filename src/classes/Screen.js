@@ -61,6 +61,10 @@ module.exports = class Screen {
     return Result.match(this, template, threshold);
   }
 
+  asyncMatch (template, threshold = 0.8) {
+    return Result.asyncMatch(this, template, threshold);
+  }
+
   get width () {
     return this.adb.wmSize.width;
   }
