@@ -3,7 +3,6 @@ const {execSync, exec: e} = require("child_process");
 const Image = require("./Image");
 
 const exec = c => execSync(c, {maxBuffer: 1024 * 1024 * 1024});
-const command = c => exec(c, {maxBuffer: 1024 * 1024 * 1024})
 
 module.exports = class Adb {
   constructor (path) {
@@ -19,8 +18,8 @@ module.exports = class Adb {
   }
 
   async capture () {
-    const buffer = exec(`${this.path} exec-out screencap -p`);
-    return await Image.read(buffer);
+    const buffer = exec(`${this.path} exec-out screencap`);
+    return await Image.fromRawData(buffer);
   }
 
   shell (command) {
@@ -28,7 +27,7 @@ module.exports = class Adb {
   }
 
   tap (x, y) {
-    command(`${this.path} shell input tap ${x} ${y}`);
+    exec(`${this.path} shell input tap ${x} ${y}`);
   }
 
   swipe (x1, y1, x2, y2, ms = 0) {
