@@ -1,3 +1,4 @@
+const dayjs = require("dayjs");
 const assert = require("./assert");
 const all1 = require("./all1");
 const any1 = require("./any1");
@@ -22,7 +23,9 @@ module.exports = (screen, templates, verbose = false) => {
   const cache = {};
   const modules = {
     screen, templates, verbose,
-    log: verbose ? console.log : it => it,
+    log: verbose
+      ? it => process.stdout.write(`${dayjs().format("HH:mm:ss")} -- ${it}`)
+      : it => it,
     snap: async () => screen.snap(),
     check: template => check(screen, templates, template),
     assert: template => assert(templates, template),

@@ -18,7 +18,7 @@ module.exports = class Adb {
   }
 
   async capture () {
-    const buffer = exec(`${this.path} exec-out screencap`);
+    const buffer = this.exec("screencap");
     return await Image.fromRawData(buffer);
   }
 
@@ -26,8 +26,12 @@ module.exports = class Adb {
     return exec(`${this.path} shell ${command}`)
   }
 
+  exec (command) {
+    return exec(`${this.path} exec-out ${command}`);
+  }
+
   tap (x, y) {
-    exec(`${this.path} shell input tap ${x} ${y}`);
+    this.shell(`input tap ${x} ${y}`);
   }
 
   swipe (x1, y1, x2, y2, ms = 0) {
@@ -39,12 +43,12 @@ module.exports = class Adb {
   }
 
   hold (x, y, ms) {
-    this.shell(`input swipe ${x} ${y} ${x} ${y} ${ms}`)
+    this.shell(`input swipe ${x} ${y} ${x} ${y} ${ms}`);
   }
 
   debug (isEnabled = true) {
     const num = isEnabled ? "1" : "0";
-    exec(`${this.path} shell settings put system pointer_location ${num}`);
+    this.shell(`settings put system pointer_location ${num}`);
   }
 
   backup () {

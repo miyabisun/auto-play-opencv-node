@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/miyabisun/auto-play-opencv-node#readme",
   "dependencies": {
+    "dayjs": "^1.11.3",
     "fs-readdir-recursive": "^1.1.0",
     "jimp": "^0.16.1",
     "ramda": "^0.27.1"
