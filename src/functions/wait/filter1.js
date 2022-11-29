@@ -7,9 +7,7 @@ module.exports = async ({check, assert, snap, log}, templateList, refresh = true
   const results = await Promise.all(
     check(templateList)
   );
-  const hits = results.filter(it => it.isMatch)
-  hits.forEach(it =>
-    log(`hit (filter1): ${it.name}`)
-  );
+  const hits = results.filter(it => it?.isMatch);
+  hits.forEach(it => log(`hit (filter1): ${it.name}`));
   return hits;
 }

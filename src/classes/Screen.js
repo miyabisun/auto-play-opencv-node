@@ -18,6 +18,11 @@ module.exports = class Screen {
     return this.snapshot = await this.adb.capture();
   }
 
+  async crop (x, y, x2, y2) {
+    await this.snap();
+    return this.snapshot.crop(x, y, x2, y2);
+  }
+
   tap (x, y) {
     const {width, height} = this.adb.wmSize;
     this.adb.tap(
