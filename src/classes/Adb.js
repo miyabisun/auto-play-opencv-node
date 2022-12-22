@@ -2,7 +2,18 @@ const R = require("ramda");
 const {execSync, exec: e} = require("child_process");
 const Image = require("./Image");
 
-const exec = c => execSync(c, {maxBuffer: 1024 * 1024 * 1024});
+const exec = command => {
+  try {
+    return execSync(command, {
+      timeout: 5000,
+      maxBuffer: 1024 * 1024 * 1024
+    });
+  } catch (e) {
+    const now = (new Date()).toISOString()
+    console.error(now, `command [${command}] timeout`);
+    return exec(command);
+  }
+}
 
 module.exports = class Adb {
   constructor (path) {
@@ -19,11 +30,11 @@ module.exports = class Adb {
 
   async capture () {
     const buffer = this.exec("screencap");
-    return await Image.fromRawData(buffer);
+    return Image.fromRawData(buffer);
   }
 
   shell (command) {
-    return exec(`${this.path} shell ${command}`)
+    return exec(`${this.path} shell ${command}`);
   }
 
   exec (command) {

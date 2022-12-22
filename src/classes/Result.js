@@ -32,6 +32,12 @@ module.exports = class Result {
       try {
         const worker = new Worker(`${__dirname}/../modules/worker-match.js`, {workerData});
         worker.on("message", resolve);
+        worker.on("exit", code => {
+          if (code != 0) {
+            console.log(workerData);
+            console.log(code);
+          }
+        });
       } catch (e) {
         reject(e);
       }
