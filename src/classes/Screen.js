@@ -31,30 +31,31 @@ module.exports = class Screen {
     );
   }
 
-  swipe (x1, y1, x2, y2, isFlick = false) {
+  swipe (x1, y1, x2, y2, ms = 2000) {
     const {width, height} = this.adb.wmSize;
     this.adb.swipe(
       Math.floor(x1 / 100 * width),
       Math.floor(y1 / 100 * height),
       Math.floor(x2 / 100 * width),
       Math.floor(y2 / 100 * height),
-      isFlick ? 50 : 0,
+      ms
     );
   }
 
   swipeTo (move, x, y, p, isFlick = false) {
+    const ms = isFlick ? 200 : 2000;
     switch (move) {
       case "up":
-        this.swipe(x, y, x, y - p, isFlick);
+        this.swipe(x, y, x, y - p, ms);
         break;
       case "right":
-        this.swipe(x, y, x + p, y, isFlick);
+        this.swipe(x, y, x + p, y, ms);
         break;
       case "down":
-        this.swipe(x, y, x, y + p, isFlick);
+        this.swipe(x, y, x, y + p, ms);
         break;
       case "left":
-        this.swipe(x, y, x - p, y, isFlick);
+        this.swipe(x, y, x - p, y, ms);
     }
   }
 
