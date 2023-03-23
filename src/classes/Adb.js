@@ -9,8 +9,7 @@ const exec = command => {
       maxBuffer: 1024 * 1024 * 1024
     });
   } catch (e) {
-    const now = (new Date()).toISOString()
-    console.error(now, `command [${command}] timeout`);
+    console.error(`command [${command}] timeout`);
     return exec(command);
   }
 }

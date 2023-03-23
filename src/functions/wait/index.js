@@ -24,7 +24,7 @@ module.exports = (screen, templates, verbose = false) => {
   const modules = {
     screen, templates, verbose,
     log: verbose
-      ? it => process.stdout.write(`${dayjs().format("HH:mm:ss")} -- ${it}\n`)
+      ? it => process.stdout.write(`${it}\n`)
       : it => it,
     snap: async () => screen.snap(),
     check: template => check(screen, templates, template),
